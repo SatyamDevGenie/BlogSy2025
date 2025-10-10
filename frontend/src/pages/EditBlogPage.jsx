@@ -35,7 +35,7 @@ export default function EditBlogPage() {
           headers: { Authorization: `Bearer ${user.token}` },
         };
         const res = await axios.get(
-          `http://localhost:5000/api/blogs/${id}`, 
+          `https://blogsy2025.onrender.com/api/blogs/${id}`, 
           config
         );
         
@@ -116,7 +116,7 @@ export default function EditBlogPage() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/upload",
+        "https://blogsy2025.onrender.com/api/upload",
         formImg,
         { 
           headers: { 

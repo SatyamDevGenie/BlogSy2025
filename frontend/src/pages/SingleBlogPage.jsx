@@ -39,7 +39,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.get(
-        `http://localhost:5000/api/blogs/${id}`,
+        `https://blogsy2025.onrender.com/api/blogs/${id}`,
         config
       );
       setBlog(res.data);
@@ -61,7 +61,7 @@ export default function SingleBlogPage() {
       };
 
       const res = await axios.get(
-        `http://localhost:5000/api/users/${authorId}/follow-status`,
+        `https://blogsy2025.onrender.com/api/users/${authorId}/follow-status`,
         config
       );
       setIsFollowing(res.data.isFollowing);
@@ -89,7 +89,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       await axios.delete(
-        `http://localhost:5000/api/blogs/${id}`,
+        `https://blogsy2025.onrender.com/api/blogs/${id}`,
         config
       );
       toast.success("✅ Blog Deleted Successfully", {
@@ -119,7 +119,7 @@ export default function SingleBlogPage() {
         },
       };
       const res = await axios.post(
-        `http://localhost:5000/api/blogs/${id}/comment`,
+        `https://blogsy2025.onrender.com/api/blogs/${id}/comment`,
         { comment },
         config
       );
@@ -148,7 +148,7 @@ export default function SingleBlogPage() {
       };
 
       const res = await axios.put(
-        `http://localhost:5000/api/blogs/${id}/like`,
+        `https://blogsy2025.onrender.com/api/blogs/${id}/like`,
         {},
         config
       );
@@ -187,7 +187,7 @@ export default function SingleBlogPage() {
       };
 
       const res = await axios.put(
-        `http://localhost:5000/api/users/favourites/${id}`,
+        `https://blogsy2025.onrender.com/api/users/favourites/${id}`,
         {},
         config
       );
@@ -224,7 +224,7 @@ export default function SingleBlogPage() {
 
       const endpoint = isFollowing ? "unfollow" : "follow";
       const res = await axios.put(
-        `http://localhost:5000/api/users/${endpoint}/${blog.author._id}`,
+        `https://blogsy2025.onrender.com/api/users/${endpoint}/${blog.author._id}`,
         {},
         config
       );
@@ -264,7 +264,7 @@ export default function SingleBlogPage() {
       };
 
       const res = await axios.put(
-        `http://localhost:5000/api/blogs/${id}/comments/${commentId}/like`,
+        `https://blogsy2025.onrender.com/api/blogs/${id}/comments/${commentId}/like`,
         {},
         config
       );

@@ -37,7 +37,7 @@ export default function ProfilePage() {
       setLoading(true);
       const config = { headers: { Authorization: `Bearer ${token}` } };
       const { data } = await axios.get(
-        "http://localhost:5000/api/users/profile",
+        "https://blogsy2025.onrender.com/api/users/profile",
         config
       );
       setProfile(data.user);
@@ -62,7 +62,7 @@ export default function ProfilePage() {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.delete(
-        `https://blogsy-deployment.onrender.com/api/users/favourites/${blogId}`,
+        `https://blogsy2025.onrender.com/api/users/favourites/${blogId}`,
         config
       );
       fetchProfile();

@@ -19,7 +19,7 @@ export default function TrendingPage() {
     try {
       setRefreshing(true);
       const response = await axios.get(
-        "http://localhost:5000/api/blogs/trending"
+        "https://blogsy2025.onrender.com/api/blogs/trending"
       );
       setTrendingBlogs(response.data);
       setError("");

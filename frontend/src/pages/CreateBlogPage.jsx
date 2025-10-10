@@ -34,7 +34,7 @@ export default function CreateBlogPage() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/upload",
+        "https://blogsy2025.onrender.com/api/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
