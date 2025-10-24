@@ -19,7 +19,7 @@ export default function TrendingPage() {
     try {
       setRefreshing(true);
       const response = await axios.get(
-        "https://blogsy2025.onrender.com/api/blogs/trending"
+        "http://localhost:5000/api/blogs/trending"
       );
       setTrendingBlogs(response.data);
       setError("");
@@ -166,94 +166,5 @@ export default function TrendingPage() {
     </div>
   );
 }
-
-
-
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-// import BlogCard from "../components/BlogCard";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
-// import { useSelector } from "react-redux";
-// import AnimatedBackground from "../components/AnimatedBackground";
-
-// export default function TrendingPage() {
-//   const [trendingBlogs, setTrendingBlogs] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState("");
-
-//   const darkMode = useSelector((state) => state.theme.darkMode); // ✅ access theme from Redux
-
-//   useEffect(() => {
-//     const fetchTrendingBlogs = async () => {
-//       try {
-//         const response = await axios.get(
-//           "https://blogsy-deployment.onrender.com/api/blogs/trending"
-//         );
-//         setTrendingBlogs(response.data);
-//       } catch (err) {
-//         setError("Failed to fetch trending blogs.");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchTrendingBlogs();
-//   }, []);
-
-//   return (
-//     <div className={darkMode ? "bg-gray-900 text-white" : "bg-white text-black"}>
-//       <Navbar />
-
-//       {/* Header */}
-//       <section className="text-center py-12 px-4 sm:py-16 sm:px-6 lg:px-8 mt-12">
-//         <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 tracking-tight animate-fade-in mt-6">
-//           🔥 Trending Blogs
-//         </h1>
-//         <p
-//           className={`text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed animate-fade-in delay-150 ${
-//             darkMode ? "text-gray-300" : "text-gray-600"
-//           }`}
-//         >
-//           Explore the most viewed blogs curated by our community.
-//         </p>
-//       </section>
-
-//       <AnimatedBackground/>
-
-//       {/* Blog Grid */}
-//       <div className="px-4 sm:px-6 lg:px-8 py-10 min-h-[60vh]">
-//         {loading ? (
-//           <p className="text-center animate-pulse text-gray-400">
-//             Loading trending blogs...
-//           </p>
-//         ) : error ? (
-//           <p className="text-center text-red-500">{error}</p>
-//         ) : trendingBlogs.length === 0 ? (
-//           <p className="text-center text-gray-400">No trending blogs found.</p>
-//         ) : (
-//           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-in">
-//             {trendingBlogs.map((blog, index) => (
-//               <div
-//                 key={blog._id}
-//                 className="transition duration-300 transform hover:scale-105"
-//                 style={{
-//                   animation: `fadeInUp 0.5s ease ${index * 100}ms both`,
-//                 }}
-//               >
-//                 <div className="scale-95 sm:scale-100">
-//                   <BlogCard blog={blog} />
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         )}
-//       </div>
-
-//       <Footer />
-//     </div>
-//   );
-// }
-
 
 
