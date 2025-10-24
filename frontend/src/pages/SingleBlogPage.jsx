@@ -620,15 +620,15 @@ export default function SingleBlogPage() {
         </div>
 
         {/* Comments Section */}
-        <div className="mt-8 sm:mt-12">
+        <div className="mt-10 sm:mt-14">
           {/* Section Header */}
-          <div className="flex items-center justify-between mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2 sm:gap-3">
-              <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-2 rounded-lg">
+          <div className="flex items-center justify-between mb-8 sm:mb-10">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-3 sm:gap-4">
+              <span className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 text-white p-2.5 rounded-xl shadow-md shadow-blue-500/30">
                 💬
               </span>
-              <span>Comments</span>
-              <span className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 sm:px-3 py-1 rounded-full">
+              <span className="tracking-tight">Comments</span>
+              <span className="text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 bg-gray-100/80 dark:bg-gray-800/60 px-3 sm:px-4 py-1 rounded-full backdrop-blur">
                 {blog.comments?.length || 0}
               </span>
             </h2>
@@ -636,22 +636,25 @@ export default function SingleBlogPage() {
 
           {/* Comment Input */}
           {user ? (
-            <form onSubmit={handleCommentSubmit} className="mb-8 sm:mb-10 relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-20 blur transition duration-300"></div>
+            <form
+              onSubmit={handleCommentSubmit}
+              className="mb-10 sm:mb-12 relative group"
+            >
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/40 via-purple-500/40 to-pink-500/40 rounded-2xl opacity-0 group-hover:opacity-100 blur-lg transition-all duration-500"></div>
               <div
-                className={`relative flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 rounded-xl ${darkMode ? "bg-gray-800/50" : "bg-gray-50"
-                  } border ${darkMode ? "border-gray-700/50" : "border-gray-200"
-                  } focus-within:ring-2 focus-within:ring-blue-500/30 transition-all`}
+                className={`relative flex items-center gap-4 px-5 sm:px-6 py-4 sm:py-5 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-none ${darkMode ? "bg-gray-900/50" : "bg-white/80"
+                  } border ${darkMode ? "border-gray-700/60" : "border-gray-100"
+                  } backdrop-blur-xl transition-all duration-300 focus-within:ring-2 focus-within:ring-blue-500/40`}
               >
                 <div className="flex-shrink-0">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-amber-400 to-pink-500 flex items-center justify-center text-white font-medium">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-amber-400 to-pink-500 flex items-center justify-center text-white font-semibold shadow-md">
                     {user.username?.charAt(0).toUpperCase() || "Y"}
                   </div>
                 </div>
                 <input
                   type="text"
-                  placeholder="Share your thoughts..."
-                  className="flex-1 bg-transparent outline-none text-sm sm:text-base text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 font-medium"
+                  placeholder="✨ Share your thoughts..."
+                  className="flex-1 bg-transparent outline-none text-sm sm:text-base text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 font-medium"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   disabled={loading}
@@ -659,15 +662,15 @@ export default function SingleBlogPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 ${loading
-                      ? "bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-gray-500 dark:text-gray-400"
-                      : "bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:shadow-lg"
+                  className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 ${loading
+                      ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
+                      : "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md hover:shadow-blue-500/30 hover:scale-105"
                     }`}
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
                       <svg
-                        className="animate-spin h-3 w-3 sm:h-4 sm:w-4"
+                        className="animate-spin h-4 w-4"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -683,7 +686,9 @@ export default function SingleBlogPage() {
                         <path
                           className="opacity-75"
                           fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 
+                  5.291A7.962 7.962 0 014 12H0c0 3.042 
+                  1.135 5.824 3 7.938l3-2.647z"
                         ></path>
                       </svg>
                       Posting
@@ -694,53 +699,52 @@ export default function SingleBlogPage() {
                 </button>
               </div>
               {commentError && (
-                <p className="mt-2 text-sm text-red-500">{commentError}</p>
+                <p className="mt-3 text-sm text-red-500">{commentError}</p>
               )}
             </form>
           ) : (
             <div
-              className={`mb-6 sm:mb-8 p-3 sm:p-4 rounded-xl ${darkMode ? "bg-gray-800/30" : "bg-gray-50"
-                } border ${darkMode ? "border-gray-700/30" : "border-gray-200"
-                }`}
+              className={`mb-10 sm:mb-12 p-5 sm:p-6 rounded-2xl ${darkMode ? "bg-gray-900/40" : "bg-gray-100/70"
+                } border ${darkMode ? "border-gray-700/40" : "border-gray-200"} text-center backdrop-blur-lg`}
             >
-              <p className="text-center text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
                 <Link
                   to="/login"
-                  className="text-blue-500 hover:underline font-medium"
+                  className="text-blue-500 hover:underline font-semibold"
                 >
                   Sign in
                 </Link>{" "}
-                to leave a comment
+                to leave a comment 💭
               </p>
             </div>
           )}
 
           {/* Comments List */}
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-5 sm:space-y-7">
             {blog.comments?.length > 0 ? (
               blog.comments.map((comment) => {
                 const isCommentLiked = comment.likes?.includes(user?._id);
                 return (
                   <div
                     key={comment._id}
-                    className={`relative p-4 sm:p-5 rounded-xl transition-all duration-300 ${darkMode
-                        ? "bg-gray-800/30 hover:bg-gray-800/50"
-                        : "bg-gray-50 hover:bg-white"
+                    className={`relative p-5 sm:p-6 rounded-2xl transition-all duration-300 ${darkMode
+                      ? "bg-gray-900/40 hover:bg-gray-900/60"
+                      : "bg-white/90 hover:bg-white"
                       } border ${darkMode
-                        ? "border-gray-700/30 hover:border-gray-700/50"
-                        : "border-gray-200 hover:border-gray-300"
-                      } shadow-sm hover:shadow-md`}
+                        ? "border-gray-700/40 hover:border-gray-600"
+                        : "border-gray-100 hover:border-gray-200"
+                      } shadow-md hover:shadow-xl backdrop-blur`}
                   >
                     {/* Comment Header */}
-                    <div className="flex items-start gap-3 mb-3">
+                    <div className="flex items-start gap-4 mb-4">
                       <div className="flex-shrink-0">
-                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-white font-medium text-xs sm:text-sm">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center text-white font-semibold text-sm shadow-md">
                           {comment.user?.username?.charAt(0).toUpperCase() || "U"}
                         </div>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline justify-between gap-2">
-                          <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white truncate">
+                          <h4 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white truncate">
                             {comment.user?.username || "User"}
                           </h4>
                           <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
@@ -751,13 +755,13 @@ export default function SingleBlogPage() {
                     </div>
 
                     {/* Comment Body */}
-                    <div className="pl-11 sm:pl-12">
-                      <p className="text-gray-800 dark:text-gray-300 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap">
+                    <div className="pl-12 sm:pl-14">
+                      <p className="text-gray-800 dark:text-gray-300 text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
                         {comment.text || comment.comment}
                       </p>
 
-                      {/* Comment Actions */}
-                      <div className="flex items-center gap-3 sm:gap-4 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/30">
+                      <div className="flex items-center gap-4 mt-4 pt-3 border-t border-gray-200 dark:border-gray-700/30">
+                        {/* Reserved for future actions */}
                       </div>
                     </div>
                   </div>
@@ -765,13 +769,12 @@ export default function SingleBlogPage() {
               })
             ) : (
               <div
-                className={`p-6 sm:p-8 text-center rounded-xl ${darkMode ? "bg-gray-800/30" : "bg-gray-50"
-                  } border ${darkMode ? "border-gray-700/30" : "border-gray-200"
-                  }`}
+                className={`p-8 sm:p-10 text-center rounded-2xl ${darkMode ? "bg-gray-900/40" : "bg-gray-100/70"
+                  } border ${darkMode ? "border-gray-700/40" : "border-gray-200"} backdrop-blur-lg`}
               >
-                <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mb-3 sm:mb-4">
+                <div className="mx-auto w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gray-200/60 dark:bg-gray-700/50 flex items-center justify-center mb-4">
                   <svg
-                    className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400"
+                    className="w-7 h-7 sm:w-9 sm:h-9 text-gray-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -780,20 +783,25 @@ export default function SingleBlogPage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth="1.5"
-                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 
+              8-9 8a9.863 9.863 0 01-4.255-.949L3 
+              20l1.395-3.72C3.512 15.042 3 
+              13.574 3 12c0-4.418 4.03-8 9-8s9 
+              3.582 9 8z"
                     ></path>
                   </svg>
                 </div>
-                <h3 className="text-base sm:text-lg font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  No comments yet
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                  No comments yet 😶
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                  Start the conversation by posting the first comment
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Be the first to start the conversation!
                 </p>
               </div>
             )}
           </div>
         </div>
+
       </div>
 
       {/* Delete Confirmation Modal */}
@@ -813,8 +821,8 @@ export default function SingleBlogPage() {
               <button
                 onClick={() => setShowDeleteModal(false)}
                 className={`px-4 py-2 rounded-lg ${darkMode
-                    ? "bg-gray-700 text-white hover:bg-gray-600"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  ? "bg-gray-700 text-white hover:bg-gray-600"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
               >
                 Cancel
