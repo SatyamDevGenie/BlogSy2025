@@ -37,7 +37,7 @@ export default function ProfilePage() {
       setLoading(true);
       const config = { headers: { Authorization: `Bearer ${token}` } };
       const { data } = await axios.get(
-        "http://localhost:5000/api/users/profile",
+        "https://blogsy-2025.onrender.com/api/users/profile",
         config
       );
       setProfile(data.user);
@@ -62,7 +62,7 @@ export default function ProfilePage() {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.delete(
-        `http://localhost:5000/api/users/favourites/${blogId}`,
+        `https://blogsy-2025.onrender.com/api/users/favourites/${blogId}`,
         config
       );
       fetchProfile();
@@ -239,8 +239,8 @@ export default function ProfilePage() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-3 flex items-center gap-2 font-medium text-sm transition-colors relative ${activeTab === tab.id
-                  ? "text-indigo-600 dark:text-indigo-400"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                ? "text-indigo-600 dark:text-indigo-400"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                 }`}
             >
               <tab.icon className="w-4 h-4" />

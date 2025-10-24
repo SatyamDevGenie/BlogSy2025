@@ -34,7 +34,7 @@ export default function CreateBlogPage() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/upload",
+        "https://blogsy-2025.onrender.com/api/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -219,10 +219,10 @@ export default function CreateBlogPage() {
                   <label
                     htmlFor="imageUpload"
                     className={`flex flex-col items-center justify-center gap-4 p-8 rounded-xl border-2 border-dashed transition-all cursor-pointer ${isDragging
-                        ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20'
-                        : imagePreview
-                          ? 'border-transparent'
-                          : 'border-gray-300 dark:border-gray-600 group-hover:border-indigo-500 bg-white/70 dark:bg-gray-700/40'
+                      ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20'
+                      : imagePreview
+                        ? 'border-transparent'
+                        : 'border-gray-300 dark:border-gray-600 group-hover:border-indigo-500 bg-white/70 dark:bg-gray-700/40'
                       }`}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}

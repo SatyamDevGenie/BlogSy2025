@@ -19,7 +19,7 @@ export default function TrendingPage() {
     try {
       setRefreshing(true);
       const response = await axios.get(
-        "http://localhost:5000/api/blogs/trending"
+        "https://blogsy-2025.onrender.com/api/blogs/trending"
       );
       setTrendingBlogs(response.data);
       setError("");
@@ -150,8 +150,8 @@ export default function TrendingPage() {
                   custom={index}
                   className="flex"
                 >
-                  <BlogCard 
-                    blog={blog} 
+                  <BlogCard
+                    blog={blog}
                     featured={index < 3} // Mark first 3 blogs as featured
                     rank={index + 1} // Pass rank for badge display
                   />

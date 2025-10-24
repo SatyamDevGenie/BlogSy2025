@@ -39,7 +39,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const res = await axios.get(
-        `http://localhost:5000/api/blogs/${id}`,
+        `https://blogsy-2025.onrender.com/api/blogs/${id}`,
         config
       );
       setBlog(res.data);
@@ -61,7 +61,7 @@ export default function SingleBlogPage() {
       };
 
       const res = await axios.get(
-        `http://localhost:5000/api/users/${authorId}/follow-status`,
+        `https://blogsy-2025.onrender.com/api/users/${authorId}/follow-status`,
         config
       );
       setIsFollowing(res.data.isFollowing);
@@ -89,7 +89,7 @@ export default function SingleBlogPage() {
         headers: { Authorization: `Bearer ${token}` },
       };
       await axios.delete(
-        `http://localhost:5000/api/blogs/${id}`,
+        `https://blogsy-2025.onrender.com/api/blogs/${id}`,
         config
       );
       toast.success("✅ Blog Deleted Successfully", {
@@ -119,7 +119,7 @@ export default function SingleBlogPage() {
         },
       };
       const res = await axios.post(
-        `http://localhost:5000/api/blogs/${id}/comment`,
+        `https://blogsy-2025.onrender.com/api/blogs/${id}/comment`,
         { comment },
         config
       );
@@ -148,7 +148,7 @@ export default function SingleBlogPage() {
       };
 
       const res = await axios.put(
-        `http://localhost:5000/api/blogs/${id}/like`,
+        `https://blogsy-2025.onrender.com/api/blogs/${id}/like`,
         {},
         config
       );
@@ -187,7 +187,7 @@ export default function SingleBlogPage() {
       };
 
       const res = await axios.put(
-        `http://localhost:5000/api/users/favourites/${id}`,
+        `https://blogsy-2025.onrender.com/api/users/favourites/${id}`,
         {},
         config
       );
@@ -224,7 +224,7 @@ export default function SingleBlogPage() {
 
       const endpoint = isFollowing ? "unfollow" : "follow";
       const res = await axios.put(
-        `http://localhost:5000/api/users/${endpoint}/${blog.author._id}`,
+        `https://blogsy-2025.onrender.com/api/users/${endpoint}/${blog.author._id}`,
         {},
         config
       );
@@ -264,7 +264,7 @@ export default function SingleBlogPage() {
       };
 
       const res = await axios.put(
-        `http://localhost:5000/api/blogs/${id}/comments/${commentId}/like`,
+        `https://blogsy-2025.onrender.com/api/blogs/${id}/comments/${commentId}/like`,
         {},
         config
       );
@@ -293,9 +293,8 @@ export default function SingleBlogPage() {
   if (loading)
     return (
       <div
-        className={`min-h-screen flex items-center justify-center ${
-          darkMode ? "bg-gray-900" : "bg-white"
-        }`}
+        className={`min-h-screen flex items-center justify-center ${darkMode ? "bg-gray-900" : "bg-white"
+          }`}
       >
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
@@ -303,9 +302,8 @@ export default function SingleBlogPage() {
   if (error)
     return (
       <div
-        className={`min-h-screen flex items-center justify-center ${
-          darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
-        }`}
+        className={`min-h-screen flex items-center justify-center ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+          }`}
       >
         <div className="text-center p-6 max-w-md">
           <div className="text-red-500 text-lg font-medium mb-4">{error}</div>
@@ -321,9 +319,8 @@ export default function SingleBlogPage() {
   if (!blog)
     return (
       <div
-        className={`min-h-screen flex items-center justify-center ${
-          darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
-        }`}
+        className={`min-h-screen flex items-center justify-center ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+          }`}
       >
         <div className="text-center p-6 max-w-md">
           <div className="text-gray-600 dark:text-gray-400 text-lg font-medium mb-4">
@@ -364,9 +361,8 @@ export default function SingleBlogPage() {
 
   return (
     <div
-      className={`min-h-screen pb-16 ${
-        darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
-      }`}
+      className={`min-h-screen pb-16 ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+        }`}
     >
       {/* Header Image */}
       <div className="relative w-full overflow-hidden shadow-lg">
@@ -415,11 +411,9 @@ export default function SingleBlogPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-6 sm:mt-8">
         {/* Glassmorphism Container */}
         <div
-          className={`relative max-w-4xl mx-auto rounded-2xl overflow-hidden ${
-            darkMode ? "bg-gray-900/30" : "bg-white"
-          } backdrop-blur-lg border ${
-            darkMode ? "border-gray-700/50" : "border-gray-200/80"
-          } shadow-xl`}
+          className={`relative max-w-4xl mx-auto rounded-2xl overflow-hidden ${darkMode ? "bg-gray-900/30" : "bg-white"
+            } backdrop-blur-lg border ${darkMode ? "border-gray-700/50" : "border-gray-200/80"
+            } shadow-xl`}
         >
           <div className="relative p-6 sm:p-8">
             {/* Blog Header */}
@@ -463,10 +457,9 @@ export default function SingleBlogPage() {
                       rounded-xl font-medium
                       text-sm transition-all duration-300
                       hover:shadow-lg
-                      ${
-                        isFollowing
-                          ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-gray-300/30"
-                          : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-blue-500/40"
+                      ${isFollowing
+                        ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-gray-300/30"
+                        : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-blue-500/40"
                       }
                       ${followLoading ? "opacity-80 cursor-not-allowed" : ""}
                       overflow-hidden
@@ -519,14 +512,12 @@ export default function SingleBlogPage() {
             {/* Content Card */}
             <div className="relative mb-10 rounded-xl overflow-hidden">
               <div
-                className={`absolute inset-0 ${
-                  darkMode ? "bg-gray-800/80" : "bg-white"
-                } opacity-95`}
+                className={`absolute inset-0 ${darkMode ? "bg-gray-800/80" : "bg-white"
+                  } opacity-95`}
               ></div>
               <div
-                className={`absolute inset-0 ${
-                  darkMode ? "opacity-[0.02]" : "opacity-[0.03]"
-                }`}
+                className={`absolute inset-0 ${darkMode ? "opacity-[0.02]" : "opacity-[0.03]"
+                  }`}
               ></div>
 
               <div className="relative prose prose-sm sm:prose-lg max-w-none px-4 sm:px-6 py-6 sm:py-8 text-gray-800 dark:text-gray-200 leading-relaxed">
@@ -545,10 +536,9 @@ export default function SingleBlogPage() {
                 className={`
                   relative flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl
                   text-sm font-medium transition-all duration-300
-                  ${
-                    isLikedByUser
-                      ? "text-rose-600 bg-rose-50/80 dark:bg-rose-900/20"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  ${isLikedByUser
+                    ? "text-rose-600 bg-rose-50/80 dark:bg-rose-900/20"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                   }
                   ${likeLoading ? "opacity-70 cursor-not-allowed" : ""}
                   group
@@ -556,9 +546,8 @@ export default function SingleBlogPage() {
               >
                 <span className="relative">
                   <span
-                    className={`text-xl transition-all duration-300 ${
-                      isLikedByUser ? "scale-125" : "group-hover:scale-110"
-                    }`}
+                    className={`text-xl transition-all duration-300 ${isLikedByUser ? "scale-125" : "group-hover:scale-110"
+                      }`}
                   >
                     ❤️
                   </span>
@@ -578,14 +567,12 @@ export default function SingleBlogPage() {
                   <span className="text-lg">👁️</span>
                   <span className="absolute top-0 right-0 -mr-1 -mt-1 flex h-2 w-2">
                     <span
-                      className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
-                        blog.views > 0 ? "bg-blue-400" : "bg-gray-400"
-                      } opacity-75`}
+                      className={`animate-ping absolute inline-flex h-full w-full rounded-full ${blog.views > 0 ? "bg-blue-400" : "bg-gray-400"
+                        } opacity-75`}
                     ></span>
                     <span
-                      className={`relative inline-flex rounded-full h-2 w-2 ${
-                        blog.views > 0 ? "bg-blue-500" : "bg-gray-500"
-                      }`}
+                      className={`relative inline-flex rounded-full h-2 w-2 ${blog.views > 0 ? "bg-blue-500" : "bg-gray-500"
+                        }`}
                     ></span>
                   </span>
                 </span>
@@ -600,19 +587,17 @@ export default function SingleBlogPage() {
                   className={`
                     relative flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl
                     text-sm font-medium transition-all duration-300
-                    ${
-                      isFavorited
-                        ? "text-rose-600 bg-rose-50/80 dark:bg-rose-900/20"
-                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                    ${isFavorited
+                      ? "text-rose-600 bg-rose-50/80 dark:bg-rose-900/20"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                     }
                     ${favLoading ? "opacity-70 cursor-not-allowed" : ""}
                     group
                   `}
                 >
                   <HeartIcon
-                    className={`h-5 w-5 transition-transform ${
-                      isFavorited ? "scale-110 fill-rose-600" : "group-hover:scale-110"
-                    }`}
+                    className={`h-5 w-5 transition-transform ${isFavorited ? "scale-110 fill-rose-600" : "group-hover:scale-110"
+                      }`}
                   />
                   <span className="hidden sm:inline">
                     {favLoading ? (
@@ -654,11 +639,9 @@ export default function SingleBlogPage() {
             <form onSubmit={handleCommentSubmit} className="mb-8 sm:mb-10 relative group">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-20 blur transition duration-300"></div>
               <div
-                className={`relative flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 rounded-xl ${
-                  darkMode ? "bg-gray-800/50" : "bg-gray-50"
-                } border ${
-                  darkMode ? "border-gray-700/50" : "border-gray-200"
-                } focus-within:ring-2 focus-within:ring-blue-500/30 transition-all`}
+                className={`relative flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 rounded-xl ${darkMode ? "bg-gray-800/50" : "bg-gray-50"
+                  } border ${darkMode ? "border-gray-700/50" : "border-gray-200"
+                  } focus-within:ring-2 focus-within:ring-blue-500/30 transition-all`}
               >
                 <div className="flex-shrink-0">
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-amber-400 to-pink-500 flex items-center justify-center text-white font-medium">
@@ -676,11 +659,10 @@ export default function SingleBlogPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 ${
-                    loading
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 ${loading
                       ? "bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-gray-500 dark:text-gray-400"
                       : "bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:shadow-lg"
-                  }`}
+                    }`}
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
@@ -717,11 +699,9 @@ export default function SingleBlogPage() {
             </form>
           ) : (
             <div
-              className={`mb-6 sm:mb-8 p-3 sm:p-4 rounded-xl ${
-                darkMode ? "bg-gray-800/30" : "bg-gray-50"
-              } border ${
-                darkMode ? "border-gray-700/30" : "border-gray-200"
-              }`}
+              className={`mb-6 sm:mb-8 p-3 sm:p-4 rounded-xl ${darkMode ? "bg-gray-800/30" : "bg-gray-50"
+                } border ${darkMode ? "border-gray-700/30" : "border-gray-200"
+                }`}
             >
               <p className="text-center text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
                 <Link
@@ -743,15 +723,13 @@ export default function SingleBlogPage() {
                 return (
                   <div
                     key={comment._id}
-                    className={`relative p-4 sm:p-5 rounded-xl transition-all duration-300 ${
-                      darkMode
+                    className={`relative p-4 sm:p-5 rounded-xl transition-all duration-300 ${darkMode
                         ? "bg-gray-800/30 hover:bg-gray-800/50"
                         : "bg-gray-50 hover:bg-white"
-                    } border ${
-                      darkMode
+                      } border ${darkMode
                         ? "border-gray-700/30 hover:border-gray-700/50"
                         : "border-gray-200 hover:border-gray-300"
-                    } shadow-sm hover:shadow-md`}
+                      } shadow-sm hover:shadow-md`}
                   >
                     {/* Comment Header */}
                     <div className="flex items-start gap-3 mb-3">
@@ -787,11 +765,9 @@ export default function SingleBlogPage() {
               })
             ) : (
               <div
-                className={`p-6 sm:p-8 text-center rounded-xl ${
-                  darkMode ? "bg-gray-800/30" : "bg-gray-50"
-                } border ${
-                  darkMode ? "border-gray-700/30" : "border-gray-200"
-                }`}
+                className={`p-6 sm:p-8 text-center rounded-xl ${darkMode ? "bg-gray-800/30" : "bg-gray-50"
+                  } border ${darkMode ? "border-gray-700/30" : "border-gray-200"
+                  }`}
               >
                 <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mb-3 sm:mb-4">
                   <svg
@@ -824,25 +800,22 @@ export default function SingleBlogPage() {
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
           <div
-            className={`rounded-lg shadow-lg p-6 w-full max-w-md ${
-              darkMode ? "bg-gray-800" : "bg-white"
-            }`}
+            className={`rounded-lg shadow-lg p-6 w-full max-w-md ${darkMode ? "bg-gray-800" : "bg-white"
+              }`}
           >
             <h3
-              className={`text-lg font-semibold mb-4 ${
-                darkMode ? "text-white" : "text-gray-800"
-              }`}
+              className={`text-lg font-semibold mb-4 ${darkMode ? "text-white" : "text-gray-800"
+                }`}
             >
               ⚠️ Are you sure you want to delete this blog?
             </h3>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className={`px-4 py-2 rounded-lg ${
-                  darkMode
+                className={`px-4 py-2 rounded-lg ${darkMode
                     ? "bg-gray-700 text-white hover:bg-gray-600"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
+                  }`}
               >
                 Cancel
               </button>

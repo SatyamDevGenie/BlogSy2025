@@ -17,10 +17,10 @@ export default function EditBlogPage() {
   const { user } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.blog);
 
-  const [formData, setFormData] = useState({ 
-    title: "", 
-    content: "", 
-    image: "" 
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    image: ""
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -35,10 +35,10 @@ export default function EditBlogPage() {
           headers: { Authorization: `Bearer ${user.token}` },
         };
         const res = await axios.get(
-          `http://localhost:5000/api/blogs/${id}`, 
+          `https://blogsy-2025.onrender.com/api/blogs/${id}`,
           config
         );
-        
+
         setFormData({
           title: res.data.title,
           content: res.data.content,
@@ -116,10 +116,10 @@ export default function EditBlogPage() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/upload",
+        "https://blogsy-2025.onrender.com/api/upload",
         formImg,
-        { 
-          headers: { 
+        {
+          headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${user.token}`
           },
@@ -143,18 +143,18 @@ export default function EditBlogPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const uploadedImage = await handleImageUpload();
       if (imageFile && !uploadedImage) return;
 
-      const updatedData = { 
-        ...formData, 
-        image: uploadedImage || formData.image 
+      const updatedData = {
+        ...formData,
+        image: uploadedImage || formData.image
       };
 
       await dispatch(updateBlog({ id, formData: updatedData })).unwrap();
-      
+
       toast.success("🎉 Blog updated successfully!");
       navigate("/");
     } catch (error) {
@@ -212,8 +212,8 @@ export default function EditBlogPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      
-      
+
+
       <main className="flex-1 py-12">
         <motion.div
           className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
@@ -231,7 +231,7 @@ export default function EditBlogPage() {
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-center relative overflow-hidden">
               <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/10"></div>
               <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-purple-500/20"></div>
-              
+
               <motion.div
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
@@ -298,7 +298,7 @@ export default function EditBlogPage() {
                 <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                   Cover Image
                 </label>
-                
+
                 <div className="relative group">
                   <input
                     type="file"
@@ -309,19 +309,18 @@ export default function EditBlogPage() {
                   />
                   <label
                     htmlFor="imageUpload"
-                    className={`flex flex-col items-center justify-center gap-4 p-8 rounded-xl border-2 border-dashed transition-all cursor-pointer ${
-                      isDragging 
+                    className={`flex flex-col items-center justify-center gap-4 p-8 rounded-xl border-2 border-dashed transition-all cursor-pointer ${isDragging
                         ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20'
-                        : imagePreview 
-                          ? 'border-transparent' 
+                        : imagePreview
+                          ? 'border-transparent'
                           : 'border-gray-300 dark:border-gray-600 group-hover:border-indigo-500 bg-white/70 dark:bg-gray-700/40'
-                    }`}
+                      }`}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                   >
                     {imagePreview ? (
-                      <motion.div 
+                      <motion.div
                         className="relative w-full h-64"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -394,7 +393,7 @@ export default function EditBlogPage() {
                   <ArrowLeft className="w-5 h-5" />
                   Cancel
                 </motion.button>
-                
+
                 <motion.button
                   type="submit"
                   disabled={isLoading}
@@ -403,7 +402,7 @@ export default function EditBlogPage() {
                   whileTap={{ scale: 0.98 }}
                 >
                   {(isLoading) && (
-                    <motion.span 
+                    <motion.span
                       className="absolute inset-0 bg-gradient-to-r from-indigo-700/30 to-purple-700/30"
                       initial={{ x: '-100%' }}
                       animate={{ x: '100%' }}
