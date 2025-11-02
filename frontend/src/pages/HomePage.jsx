@@ -8,6 +8,7 @@ import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch, FaFilter, FaSortAmountDown } from "react-icons/fa";
 import AnimatedBackground from "../components/AnimatedBackground";
+import AdminChat from "../components/AdminChat";
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -68,9 +69,8 @@ export default function HomePage() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Floating Filter Bar */}
         <motion.div
-          className={`sticky top-0 z-20 ${darkMode ? "bg-gray-900/95" : "bg-white/95"} backdrop-blur-lg border-b ${
-            darkMode ? "border-gray-700/50" : "border-gray-200/80"
-          } py-3 transition-all duration-300`}
+          className={`sticky top-0 z-20 ${darkMode ? "bg-gray-900/95" : "bg-white/95"} backdrop-blur-lg border-b ${darkMode ? "border-gray-700/50" : "border-gray-200/80"
+            } py-3 transition-all duration-300`}
           initial={{ y: -10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}
@@ -78,9 +78,8 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Search Bar */}
             <div className="relative w-full md:w-auto md:flex-1">
-              <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${
-                darkMode ? "text-gray-400" : "text-gray-500"
-              }`}>
+              <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${darkMode ? "text-gray-400" : "text-gray-500"
+                }`}>
                 <FaSearch className="h-4 w-4" />
               </div>
               <input
@@ -88,11 +87,10 @@ export default function HomePage() {
                 placeholder="Search blogs..."
                 value={searchTitle}
                 onChange={(e) => setSearchTitle(e.target.value)}
-                className={`block w-full pl-10 pr-4 py-2.5 rounded-xl text-sm md:text-base ${
-                  darkMode 
-                    ? "bg-gray-800/70 border-gray-700/50 text-white placeholder-gray-400 focus:ring-indigo-500/50" 
+                className={`block w-full pl-10 pr-4 py-2.5 rounded-xl text-sm md:text-base ${darkMode
+                    ? "bg-gray-800/70 border-gray-700/50 text-white placeholder-gray-400 focus:ring-indigo-500/50"
                     : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-500 focus:ring-indigo-500/30"
-                } border focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200`}
+                  } border focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200`}
               />
             </div>
 
@@ -102,53 +100,46 @@ export default function HomePage() {
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className={`appearance-none pl-3 pr-8 py-2.5 rounded-lg border text-sm md:text-base ${
-                    darkMode 
-                      ? "bg-gray-800/70 border-gray-700/50 text-white" 
+                  className={`appearance-none pl-3 pr-8 py-2.5 rounded-lg border text-sm md:text-base ${darkMode
+                      ? "bg-gray-800/70 border-gray-700/50 text-white"
                       : "bg-white/80 border-gray-200 text-gray-900"
-                  } focus:outline-none focus:ring-2 ${
-                    darkMode ? "focus:ring-indigo-500/50" : "focus:ring-indigo-500/30"
-                  } cursor-pointer transition-all duration-200`}
+                    } focus:outline-none focus:ring-2 ${darkMode ? "focus:ring-indigo-500/50" : "focus:ring-indigo-500/30"
+                    } cursor-pointer transition-all duration-200`}
                 >
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
-                <FaFilter className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
-                  darkMode ? "text-gray-400" : "text-gray-500"
-                } text-xs`} />
+                <FaFilter className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${darkMode ? "text-gray-400" : "text-gray-500"
+                  } text-xs`} />
               </div>
 
               <div className="relative">
                 <select
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className={`appearance-none pl-3 pr-8 py-2.5 rounded-lg border text-sm md:text-base ${
-                    darkMode 
-                      ? "bg-gray-800/70 border-gray-700/50 text-white" 
+                  className={`appearance-none pl-3 pr-8 py-2.5 rounded-lg border text-sm md:text-base ${darkMode
+                      ? "bg-gray-800/70 border-gray-700/50 text-white"
                       : "bg-white/80 border-gray-200 text-gray-900"
-                  } focus:outline-none focus:ring-2 ${
-                    darkMode ? "focus:ring-indigo-500/50" : "focus:ring-indigo-500/30"
-                  } cursor-pointer transition-all duration-200`}
+                    } focus:outline-none focus:ring-2 ${darkMode ? "focus:ring-indigo-500/50" : "focus:ring-indigo-500/30"
+                    } cursor-pointer transition-all duration-200`}
                 >
                   {sortOptions.map((option) => (
                     <option key={option} value={option}>{option}</option>
                   ))}
                 </select>
-                <FaSortAmountDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
-                  darkMode ? "text-gray-400" : "text-gray-500"
-                } text-xs`} />
+                <FaSortAmountDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${darkMode ? "text-gray-400" : "text-gray-500"
+                  } text-xs`} />
               </div>
             </div>
 
             {/* Mobile Filter Toggle */}
             <button
               onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-              className={`md:hidden flex items-center gap-2 px-4 py-2.5 rounded-lg border ${
-                darkMode 
-                  ? "bg-gray-800/70 border-gray-700/50 text-gray-300" 
+              className={`md:hidden flex items-center gap-2 px-4 py-2.5 rounded-lg border ${darkMode
+                  ? "bg-gray-800/70 border-gray-700/50 text-gray-300"
                   : "bg-white/80 border-gray-200 text-gray-700"
-              } transition-all duration-200`}
+                } transition-all duration-200`}
             >
               <FaFilter className="text-sm" />
               <span className="text-sm font-medium">Filters</span>
@@ -167,19 +158,17 @@ export default function HomePage() {
               >
                 <div className="p-3 space-y-3">
                   <div className="space-y-2">
-                    <label className={`block text-sm font-medium ${
-                      darkMode ? "text-gray-300" : "text-gray-700"
-                    }`}>
+                    <label className={`block text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"
+                      }`}>
                       Category
                     </label>
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                      className={`block w-full px-3 py-2 rounded-lg border text-sm ${
-                        darkMode 
-                          ? "bg-gray-700 border-gray-600 text-white" 
+                      className={`block w-full px-3 py-2 rounded-lg border text-sm ${darkMode
+                          ? "bg-gray-700 border-gray-600 text-white"
                           : "bg-white border-gray-300 text-gray-900"
-                      }`}
+                        }`}
                     >
                       {categories.map((cat) => (
                         <option key={cat} value={cat}>{cat}</option>
@@ -187,19 +176,17 @@ export default function HomePage() {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className={`block text-sm font-medium ${
-                      darkMode ? "text-gray-300" : "text-gray-700"
-                    }`}>
+                    <label className={`block text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"
+                      }`}>
                       Sort By
                     </label>
                     <select
                       value={sortOrder}
                       onChange={(e) => setSortOrder(e.target.value)}
-                      className={`block w-full px-3 py-2 rounded-lg border text-sm ${
-                        darkMode 
-                          ? "bg-gray-700 border-gray-600 text-white" 
+                      className={`block w-full px-3 py-2 rounded-lg border text-sm ${darkMode
+                          ? "bg-gray-700 border-gray-600 text-white"
                           : "bg-white border-gray-300 text-gray-900"
-                      }`}
+                        }`}
                     >
                       {sortOptions.map((option) => (
                         <option key={option} value={option}>{option}</option>
@@ -222,9 +209,8 @@ export default function HomePage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: i * 0.1 }}
-                  className={`h-72 rounded-xl overflow-hidden ${
-                    darkMode ? "bg-gray-800/50" : "bg-white/80"
-                  } shadow-sm animate-pulse`}
+                  className={`h-72 rounded-xl overflow-hidden ${darkMode ? "bg-gray-800/50" : "bg-white/80"
+                    } shadow-sm animate-pulse`}
                 />
               ))}
             </div>
@@ -232,9 +218,8 @@ export default function HomePage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className={`p-4 rounded-xl text-center ${
-                darkMode ? "bg-red-900/20 text-red-300" : "bg-red-100 text-red-700"
-              } shadow-sm`}
+              className={`p-4 rounded-xl text-center ${darkMode ? "bg-red-900/20 text-red-300" : "bg-red-100 text-red-700"
+                } shadow-sm`}
             >
               <p className="font-medium text-sm md:text-base">{message}</p>
             </motion.div>
@@ -242,25 +227,20 @@ export default function HomePage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className={`flex flex-col items-center justify-center py-16 rounded-xl ${
-                darkMode ? "bg-gray-800/50" : "bg-white/80"
-              } shadow-sm`}
+              className={`flex flex-col items-center justify-center py-16 rounded-xl ${darkMode ? "bg-gray-800/50" : "bg-white/80"
+                } shadow-sm`}
             >
-              <div className={`w-16 h-16 rounded-full ${
-                darkMode ? "bg-gray-700/50" : "bg-gray-200"
-              } flex items-center justify-center mb-4`}>
-                <FaSearch className={`text-xl ${
-                  darkMode ? "text-gray-500" : "text-gray-400"
-                }`} />
+              <div className={`w-16 h-16 rounded-full ${darkMode ? "bg-gray-700/50" : "bg-gray-200"
+                } flex items-center justify-center mb-4`}>
+                <FaSearch className={`text-xl ${darkMode ? "text-gray-500" : "text-gray-400"
+                  }`} />
               </div>
-              <h3 className={`text-lg font-medium mb-2 ${
-                darkMode ? "text-gray-300" : "text-gray-700"
-              }`}>
+              <h3 className={`text-lg font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"
+                }`}>
                 No blogs found
               </h3>
-              <p className={`text-sm max-w-md text-center ${
-                darkMode ? "text-gray-400" : "text-gray-500"
-              }`}>
+              <p className={`text-sm max-w-md text-center ${darkMode ? "text-gray-400" : "text-gray-500"
+                }`}>
                 Try adjusting your search or filter criteria to find what you're looking for.
               </p>
             </motion.div>
@@ -288,6 +268,8 @@ export default function HomePage() {
       </div>
 
       <Footer />
+      <AdminChat darkMode={darkMode} /> {/* ✅ Chat Bubble */}
+
     </div>
   );
 }
