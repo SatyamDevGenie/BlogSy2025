@@ -18,17 +18,36 @@ connectDB();
 
 const app = express();
 
-// Middlewares
-app.use(express.json());
+// Trust proxy for accurate IP addresses
+app.set('trust proxy', 1);
+
+// Body parsing middlewares
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
-// ✅ CORS Setup
-const allowedOrigins = ['https://blogsy-2025.netlify.app', 'http://localhost:5173'];
+// ✅ CORS Setup with enhanced security
+const allowedOrigins = [
+  'https://blogsy-2025.netlify.app', 
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
 app.use(cors({
-  origin: allowedOrigins,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset']
 }));
 
 // ✅ Handle Preflight

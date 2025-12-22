@@ -8,7 +8,6 @@ import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch, FaFilter, FaSortAmountDown } from "react-icons/fa";
 import AnimatedBackground from "../components/AnimatedBackground";
-import AdminChat from "../components/AdminChat";
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -268,7 +267,6 @@ export default function HomePage() {
       </div>
 
       <Footer />
-      <AdminChat darkMode={darkMode} /> {/* ✅ Chat Bubble */}
 
     </div>
   );

@@ -1,28 +1,67 @@
 import Blog from "../models/Blog.js";
+import User from "../models/User.js";
 
-// 📌 Create Blog
+// 📌 Create Blog with enhanced features
 const createBlog = async (req, res) => {
-  const { title, content, image } = req.body;
-
   try {
+    const { 
+      title, 
+      content, 
+      image, 
+      category, 
+      tags, 
+      status, 
+      excerpt,
+      metaTitle,
+      metaDescription 
+    } = req.body;
+
+    // Generate slug from title
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9\s]/g, '')
+      .replace(/\s+/g, '-')
+      .substring(0, 100);
+
+    // Check if slug already exists
+    const existingBlog = await Blog.findOne({ slug });
+    let finalSlug = slug;
+    if (existingBlog) {
+      finalSlug = `${slug}-${Date.now()}`;
+    }
+
     const blog = new Blog({
       title,
+      slug: finalSlug,
       content,
-      image,
+      excerpt,
+      image: image || '',
       author: req.user._id,
+      category: category || 'Other',
+      tags: tags || [],
+      status: status || 'published',
+      metaTitle: metaTitle || title,
+      metaDescription: metaDescription || excerpt,
+      publishedAt: status === 'published' ? new Date() : undefined
     });
 
     const createdBlog = await blog.save();
 
-    // 🔁 Populate author with _id and username
-    const populatedBlog = await createdBlog.populate("author", "_id username");
+    // Populate author information
+    const populatedBlog = await createdBlog.populate("author", "_id username avatar");
 
-    res.status(201).json(createdBlog);
-    // res.status(201).json(populatedBlog);
+    res.status(201).json({
+      success: true,
+      message: "Blog created successfully",
+      blog: populatedBlog
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Server error while creating blog", error });
+    console.error('Create blog error:', error);
+    res.status(500).json({ 
+      success: false,
+      message: "Server error while creating blog", 
+      error: error.message 
+    });
   }
 };
 
