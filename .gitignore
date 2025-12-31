@@ -1,6 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # Also pushing this code to gitlab.com
+# This application will be hosting soon on a separate domains hostinger. 
 
 # dependencies
 node_modules
