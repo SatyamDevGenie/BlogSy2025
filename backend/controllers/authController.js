@@ -14,14 +14,59 @@ const generateTokens = (id) => {
   return { accessToken, refreshToken };
 };
 
-// 📧 Email transporter setup
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+// 📧 Email transporter – Gmail SMTP (uses ADMIN_EMAIL + ADMIN_EMAIL_APP_PASSWORD from .env)
+const getEmailTransporter = () => {
+  const user = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
+  const pass = process.env.ADMIN_EMAIL_APP_PASSWORD || process.env.EMAIL_PASS;
+  if (!user || !pass) {
+    console.warn("⚠️ Email not configured: set ADMIN_EMAIL and ADMIN_EMAIL_APP_PASSWORD in .env to send welcome emails.");
+    return null;
   }
-});
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: { user, pass },
+  });
+};
+
+const transporter = getEmailTransporter();
+
+// 📬 Send welcome email to new user (from ADMIN_EMAIL)
+const sendWelcomeEmail = async (user) => {
+  const fromEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
+  if (!transporter || !fromEmail) {
+    console.warn("⚠️ Welcome email skipped: email not configured.");
+    return;
+  }
+  try {
+    await transporter.sendMail({
+      from: `"BlogSy" <${fromEmail}>`,
+      to: user.email,
+      subject: "Welcome to BlogSy – Start writing! 🎉",
+      html: `
+        <div style="font-family: sans-serif; max-width: 520px; margin: 0 auto;">
+          <h2 style="color: #4f46e5;">Welcome to BlogSy, ${user.username}!</h2>
+          <p>Thanks for creating your account. You're all set to write and share your stories.</p>
+          <ul style="color: #374151;">
+            <li>Create and publish blogs</li>
+            <li>Engage with comments and reactions</li>
+            <li>Follow other writers and get inspired</li>
+          </ul>
+          <p>Head over to BlogSy and create your first post when you're ready.</p>
+          <p style="margin-top: 24px; color: #6b7280; font-size: 14px;">– The BlogSy Team</p>
+        </div>
+      `,
+      text: `Welcome to BlogSy, ${user.username}! Thanks for signing up. Create and share your blogs at BlogSy. – The BlogSy Team`,
+    });
+    console.log(`✅ Welcome email sent to ${user.email}`);
+  } catch (err) {
+    console.error("❌ Welcome email failed:", err.message);
+    if (err.response) console.error("   SMTP response:", err.response);
+    if (err.code) console.error("   Code:", err.code);
+  }
+};
 
 // 📝 Register new user with email verification
 const registerUser = async (req, res) => {
@@ -63,6 +108,9 @@ const registerUser = async (req, res) => {
     // Store refresh token in database
     user.refreshToken = refreshToken;
     await user.save();
+
+    // Send welcome email (from ADMIN_EMAIL); don't block response if it fails
+    await sendWelcomeEmail(user);
 
     res.status(201).json({
       message: "Registration successful!",

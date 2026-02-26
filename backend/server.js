@@ -1,4 +1,6 @@
-import dotenv from 'dotenv';
+// Must run first so ADMIN_EMAIL, MONGO_URI, etc. are available when routes load
+import './config/env.js';
+
 import express from 'express';
 import chalk from 'chalk';
 import cors from 'cors';
@@ -12,14 +14,12 @@ import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Routes
+// Routes (authController etc. now see process.env from .env)
 import authRoutes from './routes/authRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 
-// Load .env from project root (parent of backend/) so CLOUDINARY_* and others are found
-dotenv.config({ path: path.join(__dirname, '..', '.env') });
 connectDB();
 
 const app = express();

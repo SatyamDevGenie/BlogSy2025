@@ -27,7 +27,7 @@ export default function RegisterPage() {
     }
 
     if (isSuccess && user) {
-      toast.success(`${user.username || user.email} registered successfully 🎉`);
+      toast.success(`${user.username || user.email} registered successfully! Check your email for a welcome message. 🎉`);
       dispatch(reset());
       navigate("/");
     }
