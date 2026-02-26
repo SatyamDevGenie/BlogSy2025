@@ -121,6 +121,10 @@ export const userAPI = {
   removeFromFavorites: (id) => api.delete(`/users/favourites/${id}`),
 };
 
+export const aiAPI = {
+  writingAssist: (data) => api.post('/ai/writing-assist', data),
+};
+
 export const uploadAPI = {
   uploadImage: (formData) => {
     // Do not set Content-Type so browser sends multipart/form-data with boundary

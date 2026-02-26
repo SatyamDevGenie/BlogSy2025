@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBlog } from "../features/blog/blogSlice";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Save, UploadCloud, Image, Loader2, ArrowLeft } from "lucide-react";
 import { uploadAPI } from "../utils/api";
 import Navbar from "../components/Navbar";
+import AiWritingAssist from "../components/AiWritingAssist";
 
 export default function EditBlogPage() {
   const { id } = useParams();
@@ -16,6 +17,7 @@ export default function EditBlogPage() {
 
   const { user } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.blog);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -28,6 +30,7 @@ export default function EditBlogPage() {
   const [errorBlog, setErrorBlog] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -297,10 +300,21 @@ export default function EditBlogPage() {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Blog Content
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Blog Content
+                  </label>
+                  <AiWritingAssist
+                    contentRef={contentRef}
+                    value={formData.content}
+                    onChange={(newContent) =>
+                      setFormData((prev) => ({ ...prev, content: newContent }))
+                    }
+                    darkMode={darkMode}
+                  />
+                </div>
                 <textarea
+                  ref={contentRef}
                   name="content"
                   value={formData.content}
                   onChange={handleChange}

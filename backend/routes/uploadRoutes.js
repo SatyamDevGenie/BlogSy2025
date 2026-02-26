@@ -1,99 +1,71 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
-import { storage } from "../utils/cloudinary.js";
+import fs from "fs";
+import { uploadBuffer } from "../utils/cloudinary.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// Cloudinary storage (primary)
-const cloudinaryUpload = multer({ 
-  storage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
-  },
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+// Same folder as express.static('uploads') in server.js (relative to process.cwd())
+const UPLOADS_DIR = path.join(process.cwd(), "uploads");
+
+// Single multer: memory storage so we read the file once, then upload in handler
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_FILE_SIZE },
   fileFilter: (req, file, cb) => {
-    // Check file type
-    if (file.mimetype.startsWith('image/')) {
+    if (file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {
-      cb(new Error('Only image files are allowed!'), false);
+      cb(new Error("Only image files are allowed!"), false);
     }
-  }
-});
-
-// Local storage (fallback)
-const localStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
   },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'image-' + uniqueSuffix + path.extname(file.originalname));
-  }
 });
 
-const localUpload = multer({ 
-  storage: localStorage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
-  },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed!'), false);
-    }
-  }
-});
-
-// Primary upload route (Cloudinary with local fallback)
-router.post("/", protect, cloudinaryUpload.single("image"), (req, res) => {
+// Upload route: receive file in memory, then Cloudinary or local fallback
+router.post("/", protect, upload.single("image"), async (req, res) => {
   try {
-    console.log("Upload request received");
-    console.log("File:", req.file);
-    console.log("Body:", req.body);
-
-    if (!req.file) {
-      console.log("No file received, attempting local upload fallback");
-      
-      // Try local upload as fallback
-      return localUpload.single("image")(req, res, (err) => {
-        if (err) {
-          console.error("Local upload error:", err);
-          if (err instanceof multer.MulterError) {
-            if (err.code === 'LIMIT_FILE_SIZE') {
-              return res.status(400).json({ message: "File too large. Maximum size is 10MB." });
-            }
-          }
-          return res.status(400).json({ message: err.message || "File upload error" });
-        }
-
-        if (!req.file) {
-          return res.status(400).json({ message: "No image file provided. Please select an image file." });
-        }
-
-        const localPath = `http://localhost:5000/uploads/${req.file.filename}`;
-        console.log("Image uploaded locally:", localPath);
-        return res.json({ 
-          success: true,
-          filePath: localPath,
-          message: "Image uploaded successfully (local storage)"
-        });
+    if (!req.file || !req.file.buffer) {
+      return res.status(400).json({
+        success: false,
+        message: "No image file provided. Please select an image file.",
       });
     }
 
-    console.log("Image uploaded to Cloudinary:", req.file.path);
-    res.json({ 
+    const { buffer, mimetype, originalname } = req.file;
+
+    // 1. Try Cloudinary first
+    const cloudinaryUrl = await uploadBuffer(buffer, mimetype);
+    if (cloudinaryUrl) {
+      return res.json({
+        success: true,
+        filePath: cloudinaryUrl,
+        message: "Image uploaded successfully",
+      });
+    }
+
+    // 2. Fallback: save to local uploads/
+    if (!fs.existsSync(UPLOADS_DIR)) {
+      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    }
+    const ext = path.extname(originalname) || ".jpg";
+    const filename = `image-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+    const filePath = path.join(UPLOADS_DIR, filename);
+    fs.writeFileSync(filePath, buffer);
+
+    const localUrl = `${req.protocol}://${req.get("host")}/uploads/${filename}`;
+    return res.json({
       success: true,
-      filePath: req.file.path,
-      message: "Image uploaded successfully"
+      filePath: localUrl,
+      message: "Image uploaded successfully (local storage)",
     });
   } catch (error) {
     console.error("Image upload error:", error);
-    res.status(500).json({ 
-      message: "Image upload failed", 
-      error: error.message 
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Image upload failed",
     });
   }
 });

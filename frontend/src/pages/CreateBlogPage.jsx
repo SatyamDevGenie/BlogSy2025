@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createBlog } from "../features/blog/blogSlice";
 import { uploadAPI } from "../utils/api";
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import AiWritingAssist from "../components/AiWritingAssist";
 
 export default function CreateBlogPage() {
   const [title, setTitle] = useState("");
@@ -36,6 +37,7 @@ export default function CreateBlogPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [activeTab, setActiveTab] = useState("content");
+  const contentRef = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -84,11 +86,11 @@ export default function CreateBlogPage() {
     try {
       const response = await uploadAPI.uploadImage(formData);
       toast.dismiss("upload-progress");
-      
-      // Handle both old and new response formats
-      const filePath = response.data?.filePath || response.data?.data?.filePath;
+
+      const data = response?.data ?? response;
+      const filePath = data?.filePath ?? data?.data?.filePath;
       if (!filePath) {
-        throw new Error("No file path returned from server");
+        throw new Error(data?.message || "No file path returned from server");
       }
       
       toast.success("Image uploaded successfully!");
@@ -328,10 +330,19 @@ export default function CreateBlogPage() {
 
                         {/* Content */}
                         <div>
-                          <label className={`block mb-2 text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                            Content *
-                          </label>
+                          <div className="flex items-center justify-between mb-2">
+                            <label className={`block text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                              Content *
+                            </label>
+                            <AiWritingAssist
+                              contentRef={contentRef}
+                              value={content}
+                              onChange={setContent}
+                              darkMode={darkMode}
+                            />
+                          </div>
                           <textarea
+                            ref={contentRef}
                             rows="12"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
