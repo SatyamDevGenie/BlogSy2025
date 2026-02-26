@@ -17,7 +17,8 @@ import {
   ShareIcon,
   ClockIcon,
   CalendarIcon,
-  TagIcon
+  TagIcon,
+  FaceSmileIcon
 } from "@heroicons/react/24/solid";
 import { 
   HeartIcon as HeartOutline,
@@ -30,7 +31,15 @@ import { blogAPI } from "../utils/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+// Emoji reactions (like/fast react on comments)
 const COMMENT_EMOJIS = ["👍", "❤️", "😂", "😮", "😢", "😡"];
+
+// Rich emoji list for inserting into comment/reply text (real-world style)
+const EMOJI_PICKER_LIST = [
+  "😀", "😃", "😄", "😁", "😅", "😂", "🤣", "😊", "😇", "🙂", "😉", "😍", "🥰", "😘", "😗", "😋", "😛", "😜", "🤪", "😎",
+  "👍", "👎", "👏", "🙌", "🤝", "🙏", "❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💕", "💖", "💗", "💘", "💝",
+  "🔥", "⭐", "✨", "💫", "🌟", "✅", "❌", "❗", "❓", "💯", "🎉", "🎊", "🙈", "🙉", "🙊", "👀", "💪", "🤔", "😭", "🥺"
+];
 
 export default function SingleBlogPage() {
   const { id } = useParams();
@@ -53,6 +62,7 @@ export default function SingleBlogPage() {
   const [replyText, setReplyText] = useState("");
   const [replyLoading, setReplyLoading] = useState(false);
   const [emojiLoading, setEmojiLoading] = useState(null); // "commentId" or "commentId-replyId"
+  const [showEmojiPickerFor, setShowEmojiPickerFor] = useState(null); // null | 'comment' | commentId (for reply)
 
   const darkMode = useSelector((state) => state.theme.darkMode);
   const user = useSelector((state) => state.auth.user);
@@ -266,6 +276,7 @@ export default function SingleBlogPage() {
       setBlog(res.data);
       setReplyText("");
       setReplyingToCommentId(null);
+      setShowEmojiPickerFor(null);
       toast.success("Reply posted!");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to post reply.");
@@ -289,6 +300,14 @@ export default function SingleBlogPage() {
       toast.error(err.response?.data?.message || "Failed to add reaction.");
     } finally {
       setEmojiLoading(null);
+    }
+  };
+
+  const handleInsertEmoji = (forTarget, emoji) => {
+    if (forTarget === "comment") {
+      setComment((prev) => prev + emoji);
+    } else {
+      setReplyText((prev) => prev + emoji);
     }
   };
 
@@ -703,17 +722,48 @@ export default function SingleBlogPage() {
                       </span>
                     </div>
                     <div className="flex-1">
-                      <textarea
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        placeholder="Share your thoughts..."
-                        rows="3"
-                        className={`w-full px-4 py-3 rounded-lg border ${
-                          darkMode 
-                            ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" 
-                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                        } focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none`}
-                      />
+                      <div className="relative">
+                        <textarea
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                          placeholder="Share your thoughts..."
+                          rows="3"
+                          className={`w-full px-4 py-3 rounded-lg border ${
+                            darkMode 
+                              ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowEmojiPickerFor(showEmojiPickerFor === "comment" ? null : "comment")}
+                          className={`absolute bottom-3 right-3 p-1.5 rounded-lg transition-colors ${
+                            darkMode ? "hover:bg-gray-600 text-gray-400" : "hover:bg-gray-200 text-gray-500"
+                          }`}
+                          title="Add emoji"
+                        >
+                          <FaceSmileIcon className="w-5 h-5" />
+                        </button>
+                        {showEmojiPickerFor === "comment" && (
+                          <div className={`absolute bottom-full left-0 mb-2 p-3 rounded-xl shadow-lg border max-h-48 overflow-y-auto ${
+                            darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-200"
+                          }`}>
+                            <p className={`text-xs font-medium mb-2 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>Insert emoji</p>
+                            <div className="flex flex-wrap gap-1.5 max-w-xs">
+                              {EMOJI_PICKER_LIST.map((emoji) => (
+                                <button
+                                  key={emoji}
+                                  type="button"
+                                  onClick={() => handleInsertEmoji("comment", emoji)}
+                                  className="text-lg hover:scale-125 transition-transform p-0.5"
+                                >
+                                  {emoji}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                       {commentError && (
                         <p className="mt-2 text-sm text-red-500">{commentError}</p>
                       )}
@@ -783,7 +833,10 @@ export default function SingleBlogPage() {
                             <div className="mt-2">
                               <button
                                 type="button"
-                                onClick={() => setReplyingToCommentId(replyingToCommentId === comment._id ? null : comment._id)}
+                                onClick={() => {
+                                  setReplyingToCommentId(replyingToCommentId === comment._id ? null : comment._id);
+                                  setShowEmojiPickerFor(null);
+                                }}
                                 className={`text-sm font-medium ${darkMode ? "text-indigo-400 hover:text-indigo-300" : "text-indigo-600 hover:text-indigo-700"}`}
                               >
                                 {replyingToCommentId === comment._id ? "Cancel" : "Reply"}
@@ -792,19 +845,48 @@ export default function SingleBlogPage() {
                           )}
                           {/* Reply form */}
                           {replyingToCommentId === comment._id && (
-                            <div className="mt-3 flex gap-2">
-                              <input
-                                type="text"
-                                value={replyText}
-                                onChange={(e) => setReplyText(e.target.value)}
-                                placeholder="Write a reply..."
-                                className={`flex-1 px-3 py-2 rounded-lg border text-sm ${darkMode ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"} focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
-                              />
+                            <div className="mt-3 flex gap-2 items-start">
+                              <div className="flex-1 relative">
+                                <input
+                                  type="text"
+                                  value={replyText}
+                                  onChange={(e) => setReplyText(e.target.value)}
+                                  placeholder="Write a reply..."
+                                  className={`w-full px-3 py-2 pr-10 rounded-lg border text-sm ${darkMode ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"} focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => setShowEmojiPickerFor(showEmojiPickerFor === comment._id ? null : comment._id)}
+                                  className={`absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded ${darkMode ? "hover:bg-gray-600 text-gray-400" : "hover:bg-gray-200 text-gray-500"}`}
+                                  title="Add emoji"
+                                >
+                                  <FaceSmileIcon className="w-4 h-4" />
+                                </button>
+                                {showEmojiPickerFor === comment._id && (
+                                  <div className={`absolute bottom-full left-0 mb-2 p-3 rounded-xl shadow-lg border max-h-40 overflow-y-auto z-10 ${
+                                    darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-200"
+                                  }`}>
+                                    <p className={`text-xs font-medium mb-2 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>Insert emoji</p>
+                                    <div className="flex flex-wrap gap-1.5 max-w-[280px]">
+                                      {EMOJI_PICKER_LIST.map((emoji) => (
+                                        <button
+                                          key={emoji}
+                                          type="button"
+                                          onClick={() => handleInsertEmoji(comment._id, emoji)}
+                                          className="text-base hover:scale-125 transition-transform p-0.5"
+                                        >
+                                          {emoji}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
                               <button
                                 type="button"
                                 disabled={replyLoading || !replyText.trim()}
                                 onClick={() => handleReplySubmit(comment._id)}
-                                className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+                                className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex-shrink-0"
                               >
                                 {replyLoading ? "Posting..." : "Post Reply"}
                               </button>

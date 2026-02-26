@@ -147,6 +147,7 @@ const getSingleBlog = async (req, res) => {
     const blog = await Blog.findById(req.params.id)
       .populate("author", "_id username") // 👤 Author
       .populate("comments.user", "_id username") // 💬 Comment users
+      .populate("comments.replies.user", "_id username") // 💬 Reply authors (fix: show name after refresh)
       .populate("viewedBy", "_id username"); // 👁️ Viewers
 
     if (!blog) {
@@ -217,11 +218,11 @@ const commentBlog = async (req, res) => {
 
     await blog.save();
 
-    // Refetch blog and populate comments' user with username
-    const updatedBlog = await Blog.findById(req.params.id).populate(
-      "comments.user",
-      "username"
-    );
+    // Refetch blog with author + comments populated (so frontend never shows "Anonymous")
+    const updatedBlog = await Blog.findById(req.params.id)
+      .populate("author", "_id username")
+      .populate("comments.user", "_id username")
+      .populate("comments.replies.user", "_id username");
 
     res.json(updatedBlog);
   } catch (error) {
@@ -283,10 +284,10 @@ const replyToComment = async (req, res) => {
 
     await blog.save();
 
-    const updatedBlog = await Blog.findById(blogId).populate([
-      { path: "comments.user", select: "username" },
-      { path: "comments.replies.user", select: "username" },
-    ]);
+    const updatedBlog = await Blog.findById(blogId)
+      .populate("author", "_id username")
+      .populate("comments.user", "_id username")
+      .populate("comments.replies.user", "_id username");
 
     res.json(updatedBlog);
   } catch (error) {
@@ -322,10 +323,10 @@ const addEmojiReaction = async (req, res) => {
 
     await blog.save();
 
-    const updatedBlog = await Blog.findById(blogId).populate([
-      { path: "comments.user", select: "username" },
-      { path: "comments.replies.user", select: "username" },
-    ]);
+    const updatedBlog = await Blog.findById(blogId)
+      .populate("author", "_id username")
+      .populate("comments.user", "_id username")
+      .populate("comments.replies.user", "_id username");
 
     res.json(updatedBlog);
   } catch (error) {
