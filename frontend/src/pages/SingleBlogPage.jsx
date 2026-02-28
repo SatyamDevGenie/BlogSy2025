@@ -71,15 +71,8 @@ export default function SingleBlogPage() {
 
   const fetchBlog = async () => {
     try {
-      const config = {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true
-      };
-      const res = await axios.get(
-        `http://localhost:5000/api/blogs/${id}`,
-        config
-      );
-      const blogData = res.data?.blog || res.data;
+      const res = await blogAPI.getById(id);
+      const blogData = res.data?.blog ?? res.data;
       setBlog(blogData);
 
       if (token && blogData?.author?._id !== user?._id) {
@@ -456,8 +449,16 @@ export default function SingleBlogPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="flex flex-wrap items-center gap-4 text-white/90"
+                className="flex flex-wrap items-center gap-3 sm:gap-4 text-white/90"
               >
+                {blog.category && (
+                  <>
+                    <span className="px-3 py-1 rounded-full text-sm font-semibold bg-white/20 backdrop-blur-sm border border-white/30">
+                      {blog.category}
+                    </span>
+                    <span className="text-white/60 hidden sm:inline">•</span>
+                  </>
+                )}
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
                     <span className="text-white font-medium text-sm">
@@ -466,9 +467,7 @@ export default function SingleBlogPage() {
                   </div>
                   <span className="font-medium">{blog.author?.username || "Anonymous"}</span>
                 </div>
-                
                 <span className="text-white/60">•</span>
-                
                 <div className="flex items-center gap-1">
                   <CalendarIcon className="w-4 h-4" />
                   <span>{new Date(blog.createdAt).toLocaleDateString("en-US", {
@@ -477,9 +476,7 @@ export default function SingleBlogPage() {
                     day: "numeric",
                   })}</span>
                 </div>
-                
                 <span className="text-white/60">•</span>
-                
                 <div className="flex items-center gap-1">
                   <ClockIcon className="w-4 h-4" />
                   <span>{calculateReadingTime(blog.content)} min read</span>
@@ -490,7 +487,7 @@ export default function SingleBlogPage() {
         </div>
 
         {/* Main Content Container */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-20 relative z-10">
           {/* Content Card */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}

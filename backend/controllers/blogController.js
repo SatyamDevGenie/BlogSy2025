@@ -16,32 +16,42 @@ const createBlog = async (req, res) => {
       metaDescription 
     } = req.body;
 
-    // Generate slug from title
-    const slug = title
+    if (!title || !content) {
+      return res.status(400).json({ message: "Title and content are required" });
+    }
+
+    // Generate slug from title (never leave empty)
+    let slug = (title || '')
       .toLowerCase()
       .replace(/[^a-zA-Z0-9\s]/g, '')
       .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
       .substring(0, 100);
+    if (!slug) slug = `post-${Date.now()}`;
 
     // Check if slug already exists
     const existingBlog = await Blog.findOne({ slug });
-    let finalSlug = slug;
-    if (existingBlog) {
-      finalSlug = `${slug}-${Date.now()}`;
-    }
+    const finalSlug = existingBlog ? `${slug}-${Date.now()}` : slug;
+
+    // Excerpt max 300 chars (schema limit)
+    const rawExcerpt = excerpt || (content && content.substring(0, 297) + "...") || "";
+    const safeExcerpt = rawExcerpt.length > 300 ? rawExcerpt.substring(0, 297) + "..." : rawExcerpt;
+
+    const validCategories = ['Technology', 'Lifestyle', 'Travel', 'Food', 'Health', 'Business', 'Education', 'Entertainment', 'Sports', 'Other'];
+    const safeCategory = category && validCategories.includes(category) ? category : 'Other';
 
     const blog = new Blog({
-      title,
+      title: title.trim(),
       slug: finalSlug,
-      content,
-      excerpt,
+      content: content.trim(),
+      excerpt: safeExcerpt,
       image: image || '',
       author: req.user._id,
-      category: category || 'Other',
-      tags: tags || [],
+      category: safeCategory,
+      tags: Array.isArray(tags) ? tags : [],
       status: status || 'published',
-      metaTitle: metaTitle || title,
-      metaDescription: metaDescription || excerpt,
+      metaTitle: (metaTitle || title || "").trim(),
+      metaDescription: (metaDescription || safeExcerpt || "").substring(0, 500),
       publishedAt: status === 'published' ? new Date() : undefined
     });
 
@@ -67,7 +77,8 @@ const createBlog = async (req, res) => {
 
 // ✏️ Update Blog
 const updateBlog = async (req, res) => {
-  const { title, content, image } = req.body;
+  const { title, content, image, category } = req.body;
+  const validCategories = ['Technology', 'Lifestyle', 'Travel', 'Food', 'Health', 'Business', 'Education', 'Entertainment', 'Sports', 'Other'];
 
   try {
     const blog = await Blog.findById(req.params.id);
@@ -76,11 +87,12 @@ const updateBlog = async (req, res) => {
       return res.status(404).json({ message: "Blog not found" });
     }
 
-    // 🛡️ Check if the logged-in user is the blog's author
-    if (blog.author.toString() !== req.user._id.toString()) {
+    const isAuthor = blog.author.toString() === req.user._id.toString();
+    const isAdmin = req.user.isAdmin === true;
+    if (!isAuthor && !isAdmin) {
       return res.status(403).json({
         message:
-          "You're not allowed to edit this blog. Only the author can update it.",
+          "You're not allowed to edit this blog. Only the author or an admin can update it.",
       });
     }
 
@@ -88,6 +100,10 @@ const updateBlog = async (req, res) => {
     blog.title = title || blog.title;
     blog.content = content || blog.content;
     blog.image = image !== undefined ? image : blog.image;
+    // Category is set only when creating; only admin can change it on edit (author cannot)
+    if (isAdmin && category !== undefined && validCategories.includes(category)) {
+      blog.category = category;
+    }
 
     const updatedBlog = await blog.save();
     res.status(200).json(updatedBlog);

@@ -52,7 +52,7 @@ export default function TrendingPage() {
       <Navbar />
 
       {/* Header Section */}
-      <section className="relative overflow-hidden text-center py-16 px-4 sm:px-6 lg:px-8 mt-10">
+      <section className="relative overflow-hidden text-center py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 mt-12 sm:mt-10">
         <AnimatedBackground />
         <motion.div
           initial={{ opacity: 0, y: -20 }}

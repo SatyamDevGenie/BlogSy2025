@@ -22,7 +22,8 @@ export default function EditBlogPage() {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    image: ""
+    image: "",
+    category: "Other"
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -48,6 +49,7 @@ export default function EditBlogPage() {
           title: blog.title,
           content: blog.content,
           image: blog.image || "",
+          category: blog.category || "Other",
         });
         setImagePreview(blog.image || "");
         setLoadingBlog(false);
@@ -292,6 +294,26 @@ export default function EditBlogPage() {
                   className="w-full px-5 py-4 text-lg border-0 bg-white/80 dark:bg-gray-700/60 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-500/20 transition-all hover:shadow-md placeholder-gray-400/70 dark:placeholder-gray-500"
                   placeholder="Give your blog a compelling title"
                 />
+              </motion.div>
+
+              {/* Category (read-only: set only when creating the blog) */}
+              <motion.div
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.22 }}
+              >
+                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Category
+                </label>
+                <div
+                  className="w-full px-5 py-3 rounded-xl border-0 bg-gray-100 dark:bg-gray-700/40 text-gray-600 dark:text-gray-400 cursor-not-allowed select-none"
+                  title="Category can only be set when creating a blog"
+                >
+                  {formData.category || "Other"}
+                </div>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Category cannot be changed after creation.
+                </p>
               </motion.div>
 
               {/* Content textarea */}

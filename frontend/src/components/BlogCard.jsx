@@ -16,15 +16,16 @@ export default function BlogCard({ blog, featured = false }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
       whileTap={{ scale: 0.98 }}
+      className="h-full"
     >
       <Link
         to={`/blogs/${blog._id}`}
-        className={`group relative rounded-2xl border shadow-md hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden h-full ${
+        className={`group relative rounded-2xl border shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col overflow-hidden h-full ${
           darkMode
             ? "bg-gray-800 border-gray-700 text-white"
             : "bg-white border-gray-200"

@@ -20,6 +20,7 @@ import {
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AiWritingAssist from "../components/AiWritingAssist";
+import { VALID_BLOG_CATEGORIES } from "../constants/blogCategories";
 
 export default function CreateBlogPage() {
   const [title, setTitle] = useState("");
@@ -64,10 +65,7 @@ export default function CreateBlogPage() {
     }
   }, [excerpt, content, metaDescription]);
 
-  const categories = [
-    'Technology', 'Lifestyle', 'Travel', 'Food', 'Health', 
-    'Business', 'Education', 'Entertainment', 'Sports', 'Other'
-  ];
+  const categories = [...VALID_BLOG_CATEGORIES];
 
   const handleImageUpload = async () => {
     if (!imageFile) return null;
@@ -134,15 +132,16 @@ export default function CreateBlogPage() {
     }
 
     try {
+      const excerptText = excerpt || content.substring(0, 297) + (content.length > 297 ? "..." : "");
       const blogData = { 
-        title, 
-        content, 
-        excerpt: excerpt || content.substring(0, 300) + "...",
-        category,
-        tags,
+        title: title.trim(), 
+        content: content.trim(), 
+        excerpt: excerptText.length > 300 ? excerptText.substring(0, 297) + "..." : excerptText,
+        category: category || "Other",
+        tags: Array.isArray(tags) ? tags : [],
         status: submitStatus,
-        metaTitle: metaTitle || title,
-        metaDescription: metaDescription || excerpt || content.substring(0, 160) + "...",
+        metaTitle: (metaTitle || title || "").trim(),
+        metaDescription: metaDescription || excerptText.substring(0, 160) + (excerptText.length > 160 ? "..." : ""),
         ...(uploadedImageUrl && { image: uploadedImageUrl }) 
       };
       
@@ -307,6 +306,29 @@ export default function CreateBlogPage() {
                           />
                         </div>
 
+                        {/* Category - set only when creating (cannot be changed later) */}
+                        <div>
+                          <label className={`block mb-2 text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                            Category *
+                          </label>
+                          <select
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            className={`w-full px-4 py-3 rounded-lg border ${
+                              darkMode 
+                                ? "bg-gray-700 border-gray-600 text-white" 
+                                : "bg-white border-gray-300 text-gray-900"
+                            } focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+                          >
+                            {categories.map((cat) => (
+                              <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                          </select>
+                          <p className={`mt-1 text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                            Choose once at creation; it cannot be changed later.
+                          </p>
+                        </div>
+
                         {/* Excerpt */}
                         <div>
                           <label className={`block mb-2 text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
@@ -454,26 +476,6 @@ export default function CreateBlogPage() {
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-6"
                       >
-                        {/* Category */}
-                        <div>
-                          <label className={`block mb-2 text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                            Category
-                          </label>
-                          <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            className={`w-full px-4 py-3 rounded-lg border ${
-                              darkMode 
-                                ? "bg-gray-700 border-gray-600 text-white" 
-                                : "bg-white border-gray-300 text-gray-900"
-                            } focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
-                          >
-                            {categories.map((cat) => (
-                              <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                          </select>
-                        </div>
-
                         {/* Tags */}
                         <div>
                           <label className={`block mb-2 text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"}`}>

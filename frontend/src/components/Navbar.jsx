@@ -74,7 +74,7 @@ export default function Navbar() {
       ? 'py-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-lg'
       : 'py-3 bg-white dark:bg-gray-900'
       } border-b border-gray-200/50 dark:border-gray-700/30`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container-tight">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
@@ -96,16 +96,17 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors duration-200 relative group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-200 group-hover:w-full"></span>
-              </Link>
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            {navLinks.map((link, i) => (
+              <motion.div key={link.to} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05, duration: 0.3 }}>
+                <Link
+                  to={link.to}
+                  className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors duration-200 relative group py-2"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 dark:bg-indigo-400 transition-all duration-300 group-hover:w-full rounded-full" />
+                </Link>
+              </motion.div>
             ))}
           </div>
 
@@ -214,48 +215,61 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu – staggered animation */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700"
+              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700 overflow-hidden"
             >
-              <div className="pt-4 space-y-2">
+              <motion.div
+                className="pt-4 space-y-1"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
+                }}
+              >
                 {navLinks.map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                  >
-                    {link.label}
-                  </Link>
+                  <motion.div key={link.to} variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0 } }}>
+                    <Link
+                      to={link.to}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors duration-200 text-base font-medium"
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
                 ))}
-
                 {user && (
                   <>
-                    <Link
-                      to="/createBlog"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center space-x-2 px-3 py-2 text-indigo-600 dark:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                    >
-                      <FaPenAlt className="w-4 h-4" />
-                      <span>Write Blog</span>
-                    </Link>
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                    >
-                      <FaTachometerAlt className="w-4 h-4" />
-                      <span>Dashboard</span>
-                    </Link>
+                    <motion.div variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0 } }}>
+                      <Link
+                        to="/createBlog"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center space-x-2 px-4 py-3 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-colors duration-200 font-medium"
+                      >
+                        <FaPenAlt className="w-4 h-4" />
+                        <span>Write Blog</span>
+                      </Link>
+                    </motion.div>
+                    <motion.div variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0 } }}>
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center space-x-2 px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors duration-200 font-medium"
+                      >
+                        <FaTachometerAlt className="w-4 h-4" />
+                        <span>Dashboard</span>
+                      </Link>
+                    </motion.div>
                   </>
                 )}
-              </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>

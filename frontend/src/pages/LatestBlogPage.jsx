@@ -40,7 +40,7 @@ const LatestBlogPage = () => {
       </section>
 
       {/* Blog Grid */}
-      <div className="px-4 sm:px-6 lg:px-8 py-10 min-h-[60vh]">
+      <div className="container-tight py-10 sm:py-12 min-h-[60vh]">
         {isLoading ? (
           <p className="text-center animate-pulse text-gray-400">
             Loading latest blogs...

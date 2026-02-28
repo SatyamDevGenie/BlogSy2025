@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "../features/auth/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
+import { scaleIn } from "../utils/animations";
+
+const HeroScene = lazy(() => import("../components/HeroScene"));
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -38,13 +41,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-gradient-to-br from-[#dbeafe] via-[#ede9fe] to-[#fef3c7] dark:from-gray-900 dark:via-gray-800 dark:to-black transition-colors duration-500">
-      {/* Login Card */}
+    <div className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 py-12 sm:py-16 md:py-20 overflow-hidden">
+      <Suspense fallback={null}>
+        <HeroScene />
+      </Suspense>
       <motion.div
-        initial={{ opacity: 0, y: 25 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-full max-w-md sm:max-w-lg bg-white/80 dark:bg-gray-900/70 backdrop-blur-2xl border border-white/30 dark:border-gray-700 shadow-2xl rounded-2xl p-8 sm:p-10"
+        {...scaleIn}
+        className="relative w-full max-w-md sm:max-w-lg glass-card p-6 sm:p-8 md:p-10 mx-4 sm:mx-0"
       >
         {/* Logo / Heading */}
         <div className="text-center mb-8">
@@ -175,5 +178,6 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
