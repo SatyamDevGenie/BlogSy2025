@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserProfile, toggleFavourite } from "../features/user/userSlice";
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,7 +26,7 @@ import {
 } from "@heroicons/react/24/outline";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import { blogAPI } from "../utils/api";
+import { blogAPI, userAPI } from "../utils/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -87,15 +86,7 @@ export default function SingleBlogPage() {
 
   const checkFollowStatus = async (authorId) => {
     try {
-      const config = {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true
-      };
-
-      const res = await axios.get(
-        `http://localhost:5000/api/users/${authorId}/follow-status`,
-        config
-      );
+      const res = await userAPI.checkFollowStatus(authorId);
       setIsFollowing(res.data.isFollowing);
     } catch (err) {
       console.error("Error checking follow status:", err);
@@ -126,14 +117,7 @@ export default function SingleBlogPage() {
 
   const confirmDelete = async () => {
     try {
-      const config = {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true
-      };
-      await axios.delete(
-        `http://localhost:5000/api/blogs/${id}`,
-        config
-      );
+      await blogAPI.delete(id);
       toast.success("✅ Blog Deleted Successfully");
       navigate("/");
     } catch (err) {
@@ -152,18 +136,7 @@ export default function SingleBlogPage() {
     }
 
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        withCredentials: true
-      };
-      const res = await axios.post(
-        `http://localhost:5000/api/blogs/${id}/comment`,
-        { comment },
-        config
-      );
+      const res = await blogAPI.comment(id, { comment });
       const updated = res.data?.blog || res.data;
       setBlog(updated);
       setComment("");
@@ -180,16 +153,7 @@ export default function SingleBlogPage() {
 
     try {
       setLikeLoading(true);
-      const config = {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true
-      };
-
-      const res = await axios.put(
-        `http://localhost:5000/api/blogs/${id}/like`,
-        {},
-        config
-      );
+      const res = await blogAPI.like(id);
       const updatedBlog = res.data?.blog || res.data;
       setBlog(updatedBlog);
 
@@ -224,17 +188,11 @@ export default function SingleBlogPage() {
 
     try {
       setFollowLoading(true);
-      const config = {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true
-      };
-
-      const endpoint = isFollowing ? "unfollow" : "follow";
-      await axios.put(
-        `http://localhost:5000/api/users/${endpoint}/${blog.author._id}`,
-        {},
-        config
-      );
+      if (isFollowing) {
+        await userAPI.unfollow(blog.author._id);
+      } else {
+        await userAPI.follow(blog.author._id);
+      }
 
       setIsFollowing(!isFollowing);
       toast.success(

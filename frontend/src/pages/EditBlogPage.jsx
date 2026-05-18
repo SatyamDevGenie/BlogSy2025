@@ -2,11 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBlog } from "../features/blog/blogSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { Save, UploadCloud, Image, Loader2, ArrowLeft } from "lucide-react";
-import { uploadAPI } from "../utils/api";
+import { uploadAPI, blogAPI } from "../utils/api";
 import Navbar from "../components/Navbar";
 import AiWritingAssist from "../components/AiWritingAssist";
 
@@ -36,13 +35,7 @@ export default function EditBlogPage() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const config = {
-          headers: { Authorization: `Bearer ${user.token}` },
-        };
-        const res = await axios.get(
-          `http://localhost:5000/api/blogs/${id}`,
-          config
-        );
+        const res = await blogAPI.getById(id);
         const blog = res.data?.blog || res.data;
 
         setFormData({

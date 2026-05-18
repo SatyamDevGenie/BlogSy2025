@@ -35,10 +35,13 @@ app.use(cookieParser());
 
 // ✅ CORS Setup with enhanced security
 const allowedOrigins = [
-  'https://blogsy-2025.netlify.app', 
+  'https://blogsy-2025.netlify.app',
+  'https://blogsy-2025.vercel.app',
+  'https://blogsy.vercel.app',
+  process.env.FRONTEND_URL,
   'http://localhost:5173',
-  'http://localhost:3000'
-];
+  'http://localhost:3000',
+].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
