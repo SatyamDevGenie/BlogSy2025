@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// Production: Render backend. Override with VITE_API_URL in .env (local dev uses .env.development)
-export const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 'https://blogsy-2025.onrender.com/api';
+// Local backend (run: npm run server from project root)
+export const API_BASE_URL = 'http://localhost:5000/api';
 
 const BASE_URL = API_BASE_URL;
 

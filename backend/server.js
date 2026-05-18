@@ -35,13 +35,10 @@ app.use(cookieParser());
 
 // ✅ CORS Setup with enhanced security
 const allowedOrigins = [
-  'https://blogsy-2025.netlify.app',
-  'https://blogsy-2025.vercel.app',
-  'https://blogsy.vercel.app',
-  process.env.FRONTEND_URL,
+  'https://blogsy-2025.netlify.app', 
   'http://localhost:5173',
-  'http://localhost:3000',
-].filter(Boolean);
+  'http://localhost:3000'
+];
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -79,7 +76,7 @@ app.use(errorHandler);
 
 // API Check
 app.get('/', (req, res) => {
-  res.send('BlogSy✅ API is running...');
+  res.send('✅ API is running...');
 });
 
 const PORT = process.env.PORT || 5000;
